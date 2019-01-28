@@ -1,0 +1,224 @@
+<html lang="es">
+
+    <head>
+        <title>Ejemplo Leaflet provider</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="autor" />
+        <meta name="description" content="descripción página" />
+        <meta name="robots" content="index,follow" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.css" />
+        <link rel="stylesheet" href="css/L.Control.MousePosition.css"/>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            #map {
+                height: 100%;
+                width: 100%;
+                background-color: #ffffff
+            }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.js"></script>
+        <script src="https://calvinmetcalf.github.io/leaflet-ajax/dist/leaflet.ajax.js"></script>
+        <script src="js/leaflet.ajax.min.js"></script>
+
+        <script>
+            var map, osm, controlCapas;
+
+            function init() {
+                map = L.map('map', {
+                    center: [42.6863, 2.8382],
+                    zoom: 7
+                });
+                osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    minZoom: 1,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"/>OpenStreetMap</a>'
+                });
+
+                var Esri_WorldImagery =
+                    L.tileLayer(
+                        'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX,GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                        });
+
+
+                var hibrid = L.layerGroup();
+
+                var Esri_WorldImagery2 =
+                    L.tileLayer(
+                        'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX,GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                        }).addTo(hibrid);
+
+                var Stamen_TonerHybrid = L.tileLayer(
+                    'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-hybrid/{z}/{x}/{y}{r}.{ext}', {
+                        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                        subdomains: 'abcd',
+                        minZoom: 0,
+                        maxZoom: 20,
+                        ext: 'png'
+                    }).addTo(hibrid);
+
+                    hibrid.addTo(map);
+
+                    var comarcasPoligonoStylePop = new L.GeoJSON.AJAX('datos/comarcas.geojson', {
+            style: function (feature) {
+                var colorcomarca ="#fab81e";
+                //console.info (feature);
+
+/*
+                if (feature.properties.POBLACIO < 50000){
+                    colorcomarca="#00ff00";  
+                } else if (feature.properties.POBLACIO > 50001 && feature.properties.POBLACIO < 25001){ 
+                    colorComarca ="0000ff;"   
+                } else { 
+                    colorComarca ="ff0000;"
+                }
+
+*/
+
+                return {
+
+                    fillColor: colorComarca,
+                    color: "#ffffff",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.5
+                }
+            },
+                onEachFeature: function (feature, layer) {
+                    popupContentPol = "<b>" + feature.properties.NOM + "</b>";
+                    layer.bindPopup(popupContentPol);
+                },
+
+        }).addTo(map);
+
+        var rivers = new L.GeoJSON.AJAX(
+    'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_rivers_europe.geojson', {
+
+        style: function (feature) {
+            return {
+                color: "#00ffe1",
+                weight: 6
+            }
+        },
+    }).addTo(map);
+
+/*
+                    var comarcasPoligonoDefault = new L.GeoJSON.AJAX('datos/comarcas.geojson').addTo(map);
+
+                    var farmaciasPuntoDefault = new L.GeoJSON.AJAX('datos/farmacias.geojson').addTo(map);
+
+                    var carrilsBiciLineaDefault = new L.GeoJSON.AJAX('datos/carrils-bici.geojson').addTo(map);
+*/
+
+/*
+var comarcasPoligonoStyle = new L.GeoJSON.AJAX('datos/comarcas.geojson', {
+                style: function (feature) {
+                    return {
+
+                        fillColor: "#fab81e",
+                        color: "#ffffff",
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.5
+                    }
+                }
+            }).addTo(map);
+  var farmaciasPuntoStyle = new L.GeoJSON.AJAX('datos/farmacias.geojson', {
+
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 6,
+                    fillColor: "#00ff00",
+                    color: "#ffffff",
+                    weight: 3,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                })
+            }
+        }).addTo(map);
+
+        var carrilsBiciLineaStyle = new L.GeoJSON.AJAX('datos/carrils-bici.geojson', {
+            style: function (feature) {
+                return {
+                    color: "#d607f2",
+                    weight: 6
+                }
+            }
+        }).addTo(map);
+
+*/
+
+/*
+var comarcasPoligonoStylePop = new L.GeoJSON.AJAX('datos/comarcas.geojson', {
+            style: function (feature) {
+                return {
+
+                    fillColor: "#fab81e",
+                    color: "#ffffff",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.5
+                }
+            },
+                onEachFeature: function (feature, layer) {
+                    popupContentPol = "<b>" + feature.properties.NOM + "</b>";
+                    layer.bindPopup(popupContentPol);
+                },
+
+        });
+
+
+        var farmaciasPuntoStylePop = new L.GeoJSON.AJAX('datos/farmacias.geojson', {
+
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 6,
+                    fillColor: "#00ff00",
+                    color: "#ffffff",
+                    weight: 3,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                })
+            },
+            onEachFeature: function (feature, layer) {
+                popupContentP = "<b>" + feature.properties.NOM + "</b><br>" + feature.properties
+                    .CARRCADAST + " " + feature.properties.DOORNUM + "</b>";
+                layer.bindPopup(popupContentP);
+            },
+        }).addTo(map);
+
+        var carrilsBiciLineaStylePop = new L.GeoJSON.AJAX('datos/carrils-bici.geojson', {
+            style: function (feature) {
+                return {
+                    color: "#d607f2",
+                    weight: 6
+                }
+            },
+            onEachFeature: function (feature, layer) {
+                popupContentL = "<b>" + feature.properties.TOOLTIP + "</b>";
+                layer.bindPopup(popupContentL);
+            },
+        }).addTo(map);
+
+*/
+
+                var mapaBase = {
+                    'Mapa': osm,
+                    'Foto': Esri_WorldImagery,
+                    'Hibrid': hibrid
+                };
+                L.control.mousePosition().addTo(map);
+                controlCapas = L.control.layers(mapaBase, null,{collapsed:true});
+                controlCapas.addTo(map)
+            }
+        </script>
+    </head>
+    <body onLoad="init()">
+        <div id="map"> </div>
+    </body>
+    </html>
