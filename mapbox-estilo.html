@@ -33,6 +33,9 @@
                     });
                 map.addControl(new mapboxgl.AttributionControl({compact: true}));
                 map.addControl(new mapboxgl.NavigationControl());
+                map.addControl(new MapboxGeocoder({
+accessToken: mapboxgl.accessToken
+}));
             }
         </script>
     </head>
