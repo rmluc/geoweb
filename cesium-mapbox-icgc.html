@@ -1,0 +1,85 @@
+<html lang="es">
+
+    <head>
+        <title>Ejemplo 0 Cesium básico</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="autor" />
+        <meta name="description" content="descripción página">
+        <meta name="robots" content="index,follow">
+        <script src="https://cesiumjs.org/releases/1.53/Build/Cesium/Cesium.js"></script>
+        <link href="https://cesiumjs.org/releases/1.53/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+        <style>
+            #map {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+                padding: 0;
+            }
+    
+            body {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                height: 100%;
+            }
+        </style>
+        <script>
+            function Init() {
+    
+    
+                var imageReference = new Cesium.UrlTemplateImageryProvider({
+                    url: 'https://api.mapbox.com/styles/v1/gismasterm2/cjqg9p2lm00442rqm4vlk89rt/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZ2lzbWFzdGVybTIiLCJhIjoiY2plZHhubTQxMTNoYzMza3Rqa3kxYTdrOCJ9.53B1E6mKD_EQOVb2Y0-SsA'
+                });
+    
+    
+                
+                    var imageReference=new Cesium.createOpenStreetMapImageryProvider({
+                    url: 'https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/',
+                    fileExtension: 'jpeg',
+                    maximumLevel: 19,
+                    credit: 'Institut Cartogràfic i Geològic de Catalunya'
+                    });
+    
+                
+    
+                Cesium.Ion.defaultAccessToken =
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2ZjVkZDdjMC0zNWNjLTRkMTktODM0YS1lNzVkYjQwNWQzNmEiLCJpZCI6NDMyLCJpYXQiOjE1MjUyNDI1NDR9.gnm-s8YmqoAXwQTr-dT-CCQkGxe5jk_8b6xFUd1VxgY';
+                map = new Cesium.Viewer('map', {
+    
+                    imageryProvider: imageReference,
+                    timeline: false,
+                    navigationHelpButton: true,
+                    scene3DOnly: true,
+                    fullscreenButton: true,
+                    baseLayerPicker: false,
+                    homeButton: false,
+                    infoBox: true,
+                    sceneModePicker: false,
+                    animation: false,
+                    geocoder: false,
+                    sceneMode: Cesium.SceneMode.SCENE3D,
+                    terrainProvider: Cesium.createWorldTerrain()
+    
+                });
+    
+    
+                map.camera.flyTo({
+                    destination: Cesium.Cartesian3.fromDegrees(2.1806, 41.4003, 15000),
+                    orientation: {
+                        pitch: Cesium.Math.toRadians(-45.0)
+                    },
+                });
+            };
+        </script>
+    </head>
+    
+    <body onload="Init()">
+        <div id="map"></div>
+    </body>
+    
+    </html>
